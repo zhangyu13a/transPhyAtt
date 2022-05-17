@@ -1,2 +1,2 @@
 # transPhyAtt
-The code will be avialable soon.
+The code will be available soon.
