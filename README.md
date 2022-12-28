@@ -1,5 +1,5 @@
 
-# Transferable Physical Attack against Object Detection with Separable Attention
+# Boosting Transferability of Physical Attack against Detectors by Redistributing Separable Attentions
 
 
 ## Requirements
