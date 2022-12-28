@@ -1,5 +1,4 @@
 """
-#zy:用于测试CAM
 Created on Thu Oct 21 11:09:09 2017
 @author: Utku Ozbulak - github.com/utkuozbulak
 """
