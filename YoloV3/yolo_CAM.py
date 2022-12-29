@@ -11,7 +11,7 @@ from PIL import Image, ImageDraw, ImageFont
 from YoloV3.nets.yolo3_CAM import YoloBody 
 from YoloV3.utils.utils import (DecodeBox)
 
-from YoloV3 import grad_CAM
+from YoloV3 import attention
 
 class YOLO(object):
     _defaults = {
@@ -82,7 +82,7 @@ class YOLO(object):
                 self.colors))
 
         #Grad-CAM
-        self.grad_cam = grad_CAM.GradCAM(self.net, ori_shape=self._defaults["model_image_size"],
+        self.grad_cam = attention.Attention(self.net, ori_shape=self._defaults["model_image_size"],
                          final_shape=self._defaults["model_image_size"],yolo_decodes=self.yolo_decodes,
                          num_classes=self.num_classes, conf_thres=self._defaults["confidence"], 
                          nms_thres=self._defaults["iou"])
