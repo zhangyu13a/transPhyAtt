@@ -70,7 +70,7 @@ class Patch():
                     #-----------------------------averaged multi-scale attention map---------------------#
                     inputs = {"image": total_img}
                     self.dnet.multi_attention._register_hook()
-                    grad_cam_resize_list,cam_ori_list,cam_ori_norm_list = self.dnet.multi_attention(inputs,retain_graph=True)                    
+                    grad_cam_resize_list,_,_ = self.dnet.multi_attention(inputs,retain_graph=True)                    
                     self.dnet.multi_attention.remove_handlers()
                     #------------------------------------------------------------------------------------#
 
@@ -138,7 +138,7 @@ class Patch():
                     dataset.set_mesh(mesh)   
                     
                     del  output,total_img, texture_img,contour,  \
-                        nps,loss,tv_loss,grad_cam_resize_list,cam_ori_list,cam_ori_norm_list 
+                        nps,loss,tv_loss,grad_cam_resize_list
                     torch.cuda.empty_cache()
 
             patch_save = self.patch.cpu().detach().clone()
