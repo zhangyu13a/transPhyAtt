@@ -69,9 +69,9 @@ class Patch():
                                        
                     #-----------------------------averaged multi-scale attention map---------------------#
                     inputs = {"image": total_img}
-                    self.dnet.grad_cam._register_hook()
-                    grad_cam_resize_list,cam_ori_list,cam_ori_norm_list = self.dnet.grad_cam(inputs,retain_graph=True)                    
-                    self.dnet.grad_cam.remove_handlers()
+                    self.dnet.multi_attention._register_hook()
+                    grad_cam_resize_list,cam_ori_list,cam_ori_norm_list = self.dnet.multi_attention(inputs,retain_graph=True)                    
+                    self.dnet.multi_attention.remove_handlers()
                     #------------------------------------------------------------------------------------#
 
                     heatmap_constrain_list=list()                                                                  #Foreground Attention
