@@ -81,8 +81,8 @@ class YOLO(object):
             map(lambda x: (int(x[0] * 255), int(x[1] * 255), int(x[2] * 255)),
                 self.colors))
 
-        #Grad-CAM
-        self.grad_cam = attention.Attention(self.net, ori_shape=self._defaults["model_image_size"],
+        #multi scale attention
+        self.multi_attention = attention.Attention(self.net, ori_shape=self._defaults["model_image_size"],
                          final_shape=self._defaults["model_image_size"],yolo_decodes=self.yolo_decodes,
                          num_classes=self.num_classes, conf_thres=self._defaults["confidence"], 
                          nms_thres=self._defaults["iou"])
