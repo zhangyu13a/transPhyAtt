@@ -89,22 +89,12 @@ class Patch():
                             heatmap_constrain=heatmap_constrain+heatmap_constrain_tmp                               #accumulate foreground attention
                             heatmap_bg=heatmap_bg+heatmap_bg_tmp                                                    #accumulate background attention           
 
-                    k_num=100
-                    heatmap_constrain2=torch.sum(heatmap_constrain,dim=1).reshape(len(file_name_BS),-1)        
-                    heatmap_constrain2_topK=torch.topk(heatmap_constrain2,k=k_num,dim=1,largest=True)                #get the top-K values
-                    topK_value,topK_value_indice=heatmap_constrain2_topK[0],heatmap_constrain2_topK[1]
-                    heat_average_topk=topK_value.sum(dim=1)/k_num 
+
                     heat_average=torch.sum(heatmap_constrain,dim=[1,2,3])/torch.sum(heatmap_constrain!=0,dim=[1,2,3])#global average value of foreground attention 
-                    heat_loss=torch.mean(heat_average_topk/heat_average)                                             #local average value of foreground attention
-
-                    heatmap_bg2=torch.sum(heatmap_bg,dim=1).reshape(len(file_name_BS),-1)
-                    heatmap_bg2_topK=torch.topk(heatmap_bg2,k=k_num,dim=1,largest=True) 
-                    topK_value1,topK_value_indice=heatmap_bg2_topK[0],heatmap_bg2_topK[1]
-                    heat_average_bg_topk=topK_value1.sum(dim=1)/k_num
                     heat_average_bg=torch.sum(heatmap_bg,dim=[1,2,3])/torch.sum(heatmap_constrain==0,dim=[1,2,3])    #global average value of background attention 
-                    heat_loss_bg=torch.mean(heat_average_bg_topk/heat_average_bg)
 
-                    heat_loss=torch.mean(heat_average)*5-torch.mean(heat_average_bg)*5+heat_loss*1-heat_loss_bg*1   #attention loss
+
+                    heat_loss=torch.mean(heat_average)*5-torch.mean(heat_average_bg)   #attention loss
                     tv_loss = total_variation(self.patch) * 2.5  
                     nps = self.nps_calculator(self.patch)
 
