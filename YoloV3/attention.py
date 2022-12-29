@@ -17,7 +17,7 @@ from typing import Tuple, List, Optional
 import numbers
 from torch import Tensor
 
-class GradCAM(object):
+class Attention(object):
 
     def __init__(self, net, ori_shape, final_shape, yolo_decodes,num_classes, conf_thres, nms_thres):
         self.net = net
@@ -277,7 +277,7 @@ class myRandomAffine(torch.nn.Module):
                     raise ValueError("scale values should be positive")
         self.scale = scale
         #new
-        if inv_scale is not None:#反向缩放
+        if inv_scale is not None:
             _check_sequence_input(inv_scale, "inv_scale", req_sizes=(2, ))
         self.inv_scale = inv_scale
 
@@ -299,9 +299,9 @@ class myRandomAffine(torch.nn.Module):
     def get_params(
             degrees: List[float],
             translate: Optional[List[float]],
-            inv_translate: Optional[List[float]],#zy添加
+            inv_translate: Optional[List[float]],#
             scale_ranges: Optional[List[float]],
-            inv_scale_ranges: Optional[List[float]],#zy添加
+            inv_scale_ranges: Optional[List[float]],#
             shears: Optional[List[float]],
             img_size: List[int]
     ) -> Tuple[float, Tuple[int, int], float, Tuple[float, float]]:
@@ -317,14 +317,14 @@ class myRandomAffine(torch.nn.Module):
             tx = int(round(torch.empty(1).uniform_(-max_dx, max_dx).item()))
             ty = int(round(torch.empty(1).uniform_(-max_dy, max_dy).item()))
             translations = (tx, ty)
-        elif inv_translate is not None:#zy添加反变化
+        elif inv_translate is not None:#
             translations=inv_translate
         else:
             translations = (0, 0)
 
         if scale_ranges is not None:
             scale = float(torch.empty(1).uniform_(scale_ranges[0], scale_ranges[1]).item())
-        elif inv_scale_ranges is not None:#zy添加反变化
+        elif inv_scale_ranges is not None:#
             scale=inv_scale_ranges
         else:
             scale = 1.0
@@ -356,8 +356,8 @@ class myRandomAffine(torch.nn.Module):
         img_size = F._get_image_size(img)
 
         ret = self.get_params(self.degrees, self.translate,self.inv_translate, self.scale,self.inv_scale, self.shear, img_size)
-        angle, translations, scale, shear=ret #zy添加
-        return F.affine(img, *ret, interpolation=self.interpolation, fill=fill),translations, scale#改写，返回平移的量和缩放系数
+        angle, translations, scale, shear=ret #
+        return F.affine(img, *ret, interpolation=self.interpolation, fill=fill),translations, scale#
 
     def __repr__(self):
         s = '{name}(degrees={degrees}'
