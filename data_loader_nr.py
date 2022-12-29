@@ -134,9 +134,13 @@ class MyDataset(Dataset):
         new_car[:,:,:,0] = F.pad(imgs_pred[:,:,:,0], location, "constant", value=0)
         new_car[:,:,:,1] = F.pad(imgs_pred[:,:,:,1], location, "constant", value=0)
         new_car[:,:,:,2] = F.pad(imgs_pred[:,:,:,2], location, "constant", value=0)
+        
+        randomAffine_scale=myRandomAffine(degrees=(0,0),scale=(1.5,1.5),interpolation=InterpolationMode.NEAREST)#  
+        new_contour_scale,_,scale_factor=randomAffine_scale(new_contour.permute(0, 3, 1, 2).clone())#randomAffine_scale(img_ori)
+        new_contour_scale=new_contour_scale.permute(0, 2, 3, 1)#NCHW->NHWC
                          
         total_img = torch.where((new_contour == 0.),img.permute(0, 2,3, 1), new_car)       
-        return index,file, total_img.squeeze(0) , imgs_pred.squeeze(0),new_contour.squeeze(0)
+        return index,file, total_img.squeeze(0) , imgs_pred.squeeze(0),new_contour_scale.squeeze(0)
     
     def __len__(self):
         return len(self.files)
