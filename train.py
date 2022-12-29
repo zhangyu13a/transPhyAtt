@@ -70,17 +70,17 @@ class Patch():
                     #-----------------------------averaged multi-scale attention map---------------------#
                     inputs = {"image": total_img}
                     self.dnet.multi_attention._register_hook()
-                    grad_cam_resize_list,_,_ = self.dnet.multi_attention(inputs,retain_graph=True)                    
+                    attention_list,_,_ = self.dnet.multi_attention(inputs,retain_graph=True)                    
                     self.dnet.multi_attention.remove_handlers()
                     #------------------------------------------------------------------------------------#
 
                     heatmap_constrain_list=list()                                                                  #Foreground Attention
                     heatmap_bg_list=list()                                                                         #Background Attention
-                    for kk in range(len(grad_cam_resize_list)):
-                        heatmap_constrain_tmp=grad_cam_resize_list[kk]*contour.permute(0,3,1,2) 
+                    for kk in range(len(attention_list)):
+                        heatmap_constrain_tmp=attention_list[kk]*contour.permute(0,3,1,2) 
                         heatmap_constrain_list.append(heatmap_constrain_tmp)
 
-                        heatmap_bg_tmp=grad_cam_resize_list[kk]-heatmap_constrain_tmp
+                        heatmap_bg_tmp=attention_list[kk]-heatmap_constrain_tmp
                         heatmap_bg_list.append(heatmap_bg_tmp)
                         if kk==0:
                             heatmap_constrain=heatmap_constrain_tmp
@@ -138,7 +138,7 @@ class Patch():
                     dataset.set_mesh(mesh)   
                     
                     del  output,total_img, texture_img,contour,  \
-                        nps,loss,tv_loss,grad_cam_resize_list
+                        nps,loss,tv_loss,attention_list
                     torch.cuda.empty_cache()
 
             patch_save = self.patch.cpu().detach().clone()
